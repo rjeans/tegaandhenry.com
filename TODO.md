@@ -12,21 +12,21 @@ Outstanding work on `tegaandhenry.com`. Roughly in the order it should be done.
 
 ## 2. Deploy
 
-- [x] Create the Cloudflare Pages project — `tegaandhenry`, created with
-      `wrangler pages project create`
-- [x] Check the `*.pages.dev` URL renders correctly before attaching the domain —
-      https://tegaandhenry.pages.dev serves 200 consistently
-- [x] Confirm HTTPS and that `/sitemap-index.xml` and `/robots.txt` are served —
-      both 200, unknown paths correctly 404
-- [ ] **Decide how pushes deploy.** The project is *direct upload*, so pushing to
-      `main` deploys nothing; deploys are manual (`npm run build && npx wrangler
-      pages deploy`). See "Optional: make pushes deploy automatically" in
-      `HOSTING.md` for the two routes.
+- [ ] **Create the Pages project via the dashboard Git flow** — build settings in
+      `HOSTING.md`. Do *not* use `wrangler pages project create`: that makes a
+      Direct Upload project, which can never be switched to the Git integration.
+      A wrangler-made project was created and deleted for exactly this reason.
+- [ ] Confirm `wrangler pages project list` reports `Git Provider: Yes`
 - [ ] Add `tegaandhenry.com` as a custom domain; decide whether `www` should
       resolve too, and redirect it if so
 - [ ] Consider blocking indexing of `tegaandhenry.pages.dev` — `robots.txt` is
-      `Allow: /`, so the placeholder is crawlable. Canonical tags already point at
-      `tegaandhenry.com`, which limits the damage.
+      `Allow: /`, so the placeholder copy would be crawlable. Canonical tags
+      already point at `tegaandhenry.com`, which limits the damage.
+
+A previous deployment confirmed the build is sound: `/` served 200 consistently,
+`/robots.txt` and `/sitemap-index.xml` both 200, unknown paths 404, and canonical
+and `og:url` tags correctly pointed at `tegaandhenry.com`. Re-check after the Git
+connection, since that deployment has been deleted.
 
 ## 3. DNS for the wedding subdomain
 

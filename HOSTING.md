@@ -1,61 +1,63 @@
 # Hosting on Cloudflare Pages
 
-## Current state
+Deployment works exactly as jeansy.org does: Cloudflare watches the GitHub
+repository, builds on every push to `main`, and serves the result.
 
-The site is **live at https://tegaandhenry.pages.dev** via *direct upload*, not via
-the Git integration. This differs from jeansy.org — read the next section before
-assuming a push deploys anything.
+## Current state
 
 - [x] `main` pushed to
   [`rjeans/tegaandhenry.com`](https://github.com/rjeans/tegaandhenry.com) (public)
-- [x] Pages project `tegaandhenry` created (`wrangler pages project create`)
-- [x] First deployment uploaded and verified
+- [ ] **Pages project not yet created** — do the Git connection below
 - [ ] Custom domain `tegaandhenry.com` — not yet attached
 
-## How deploys currently happen
+## A note on Direct Upload
 
-Manually, from a working copy:
+A `tegaandhenry` project was briefly created with `wrangler pages project create`
+and then deleted. That matters, because the choice is permanent:
 
-```
-npm run build
-npx wrangler pages deploy
-```
+> If you choose Direct Upload, you cannot switch to Git integration later. You will
+> have to create a new project with Git integration to use automatic deployments.
+> — [Cloudflare docs](https://developers.cloudflare.com/pages/get-started/direct-upload/)
 
-`wrangler.toml` declares `pages_build_output_dir = "./dist"`, so no arguments are
-needed. Authentication is the OAuth session from `npx wrangler login`, stored in
-`~/Library/Preferences/.wrangler/`.
+So **do not create this project with wrangler.** `wrangler pages project create`
+and a first `wrangler pages deploy` both produce a Direct Upload project, locking
+out the Git integration and PR previews for that project's lifetime. The project
+must be created through the dashboard Git flow. Wrangler is still useful afterwards
+for a manual emergency deploy, but it must not be what creates the project.
 
-**Pushing to `main` deploys nothing.** There is no `.github/workflows` and no Git
-integration. `wrangler pages project list` shows `Git Provider: No` for this
-project, against `Yes` for `jeansy-org`.
+The same lock applies in reverse: a Git-integrated project cannot switch to Direct
+Upload.
 
-## Optional: make pushes deploy automatically
+## Connect to Git
 
-Two mutually exclusive routes. Do not do both — they would race on every push.
-
-**A. Cloudflare Pages Git integration** (what jeansy.org uses). Cloudflare builds
-server-side and gives PR preview URLs for free. Dashboard only, because it needs a
-GitHub OAuth app install that has no API equivalent:
+This is dashboard-only. It installs the Cloudflare Pages GitHub App, which is an
+OAuth consent flow with no CLI or API equivalent.
 
 1. [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages** →
-   the `tegaandhenry` project → **Settings** → **Builds** → connect to Git.
-2. Pick the `tegaandhenry.com` repository, then use the build settings below.
+   **Create** → **Pages** tab → **Connect to Git**.
+2. Authorise GitHub and select the `tegaandhenry.com` repository. If it is not
+   listed, the Cloudflare GitHub App is scoped to selected repositories — use the
+   link to grant it access to this one.
+3. Apply the build settings below, then **Save and Deploy**.
 
-**B. GitHub Actions + `wrangler pages deploy`.** Needs `CLOUDFLARE_API_TOKEN` (a
-custom token with `Account → Cloudflare Pages → Edit`) and `CLOUDFLARE_ACCOUNT_ID`
-as repository secrets. No PR previews unless a second workflow adds them, and the
-token needs rotating. Note the `gh` CLI token here lacks the `workflow` scope, so
-workflow files must be pushed over the SSH remote.
+Afterwards `wrangler pages project list` should show `Git Provider: Yes`, matching
+`jeansy-org`. If it shows `No`, the project was created the wrong way — delete it
+and redo step 1.
 
 ## Build settings
 
 | Setting | Value |
 | --- | --- |
 | Project name | `tegaandhenry` |
+| Production branch | `main` |
 | Framework preset | Astro |
 | Build command | `npm run build` |
 | Build output directory | `dist` |
 | Root directory | `/` (leave empty) |
+
+The project name feeds the `*.pages.dev` subdomain, so it is `tegaandhenry`, not
+`tegaandhenry.com` — project names cannot contain dots, though the repository is
+named with one.
 
 No environment variables and no compatibility flags are needed — the site is fully
 static, so there is no Worker runtime involved. `wrangler.toml` in the repo already
