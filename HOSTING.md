@@ -9,9 +9,39 @@ repository, builds on every push to `main`, and serves the result.
   [`rjeans/tegaandhenry.com`](https://github.com/rjeans/tegaandhenry.com) (public)
 - [x] Pages project `tegaandhenry-com` created through the dashboard Git flow;
   `wrangler pages project list` reports `Git Provider: Yes`
-- [x] Live at **https://tegaandhenry-com.pages.dev** — every push to `main`
-  rebuilds, and every other branch gets its own preview URL
-- [ ] Custom domain `tegaandhenry.com` — not yet attached
+- [x] Live at **https://tegaandhenry-com.pages.dev**
+- [ ] Custom domain `tegaandhenry.com` — registered on the project but **pending**,
+  awaiting a DNS record (see "Custom domain")
+- [ ] **Push-to-deploy is not actually working** (see "Builds are not triggering")
+
+## Builds are not triggering
+
+Every deployment so far has `deployment_trigger.type: ad_hoc` — one from project
+creation, one forced through the API. A build started by a push would read
+`github:push`. **No push has ever triggered a build.**
+
+The Git connection itself is sound: the project has `deployments_enabled: true`,
+`production_branch: main`, the right repository, and Cloudflare successfully
+fetched a commit that had only just been pushed. So Cloudflare can *read* the
+repository; push *events* are not reaching it.
+
+That points at the GitHub App rather than the Pages project. Worth checking:
+
+- GitHub → **Settings** → **Applications** → **Cloudflare Pages** → confirm the
+  app has access to `tegaandhenry.com`, not just to other repositories.
+- The Pages project → **Settings** → **Builds** → reconnect if the link looks
+  stale.
+
+Until it works, a deployment can be forced without the dashboard:
+
+```
+curl -X POST -H "Authorization: Bearer $CF_TOKEN" \
+  ".../pages/projects/tegaandhenry-com/deployments" -F "branch=main"
+```
+
+Do **not** work around it with `wrangler pages deploy` — Direct Upload
+deployments into a Git-connected project are a different mechanism and muddy the
+deployment history.
 
 ## A note on Direct Upload
 
@@ -84,11 +114,33 @@ declares `pages_build_output_dir = "./dist"`, which is what lets a manual
 
 ## Custom domain
 
-1. Add `tegaandhenry.com` as a zone in Cloudflare DNS and point the registrar's
-   nameservers at Cloudflare.
-2. In the Pages project → **Custom domains** → **Set up a custom domain** →
-   `tegaandhenry.com`. Repeat for `www.tegaandhenry.com` if you want it.
-3. Cloudflare creates the DNS records and issues the certificate itself.
+The zone `tegaandhenry.com` is already active in the account on the
+`kevin`/`lindsey` nameservers, so no registrar work is needed.
+
+`tegaandhenry.com` has been added to the Pages project and sits at status
+**pending**, because **no DNS record exists at the apex yet**. Adding a custom
+domain through the REST API registers the hostname but does *not* create the
+record; the dashboard flow does both. Until the record exists, validation cannot
+complete and no certificate is issued.
+
+To finish, add this record under the zone's **DNS** tab:
+
+| Field | Value |
+| --- | --- |
+| Type | `CNAME` |
+| Name | `@` (i.e. `tegaandhenry.com`) |
+| Target | `tegaandhenry-com.pages.dev` |
+| Proxy status | **Proxied** (orange cloud) |
+
+Cloudflare flattens the apex CNAME automatically, so this is valid at the root
+despite what the DNS spec would otherwise allow. Validation and the certificate
+follow within a few minutes.
+
+`www` is a separate decision and is not currently configured. To make it resolve,
+add it as a second custom domain and redirect it to the apex with a redirect rule.
+
+Note the certificate authority for this domain is Google, not Cloudflare — that is
+simply which CA the Pages certificate pipeline picked, and needs no action.
 
 ## The wedding subdomain
 

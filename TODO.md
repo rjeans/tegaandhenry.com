@@ -19,8 +19,14 @@ Outstanding work on `tegaandhenry.com`. Roughly in the order it should be done.
 - [x] Verify the deployment — `/` serves 200, `/robots.txt` and
       `/sitemap-index.xml` 200, unknown paths 404, canonical and `og:url` point
       at `tegaandhenry.com`
-- [ ] Add `tegaandhenry.com` as a custom domain; decide whether `www` should
-      resolve too, and redirect it if so
+- [ ] **Add the apex DNS record** — `tegaandhenry.com` is registered on the Pages
+      project but pending, because the API does not create the record the way the
+      dashboard does. Exact record in `HOSTING.md` under "Custom domain".
+- [ ] **Fix push-to-deploy** — no push has ever triggered a build; every
+      deployment so far was `ad_hoc`. See "Builds are not triggering" in
+      `HOSTING.md`. Without this the Git integration gives nothing that a manual
+      deploy would not.
+- [ ] Decide whether `www.tegaandhenry.com` should resolve, and redirect it if so
 - [ ] Consider blocking indexing of `tegaandhenry-com.pages.dev` — `robots.txt`
       is `Allow: /`, so the placeholder copy is crawlable. Canonical tags already
       point at `tegaandhenry.com`, which limits the damage.
