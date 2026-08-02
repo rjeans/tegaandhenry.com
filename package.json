@@ -1,0 +1,25 @@
+{
+  "name": "tegaandhenry",
+  "version": "1.0.0",
+  "description": "Permanent home page for tegaandhenry.com",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "astro": "^5.15.3",
+    "tailwindcss": "^3.4.17"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^24.6.1",
+    "typescript": "^5.9.3"
+  }
+}

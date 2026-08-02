@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+---
+
+<BaseLayout title={`Page not found — ${site.name}`}>
+  <section class="mx-auto max-w-2xl px-6 py-24 text-center">
+    <p class="eyebrow mb-6 text-xs" style="color: var(--muted);">404</p>
+    <h1 class="mb-6 text-3xl sm:text-4xl">This page does not exist</h1>
+    <p class="mb-8 text-lg" style="color: var(--muted);">
+      The link may be out of date, or we may have moved something.
+    </p>
+    <a href="/" class="hover:underline">Back to the home page</a>
+  </section>
+</BaseLayout>

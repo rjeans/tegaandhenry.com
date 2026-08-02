@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tegaandhenry.com/sitemap-index.xml

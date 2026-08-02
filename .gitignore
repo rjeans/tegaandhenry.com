@@ -1,0 +1,22 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# cloudflare / wrangler
+.wrangler/
+
+# Full-resolution source photographs (8000px, ~18 MB each). Kept locally as an
+# archive, never committed: git stores binaries whole, so each revision would add
+# another ~18 MB to every clone forever. The build only reads the web-sized
+# master committed at src/assets/.
+images/
+
+# environment
+.env
+.env.production
+
+# macOS
+.DS_Store

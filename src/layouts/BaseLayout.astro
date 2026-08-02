@@ -1,0 +1,283 @@
+---
+import { site } from '../config/site';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = site.name,
+  description = site.description,
+  image = '/images/og-home.jpg',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL(image, Astro.site);
+const year = new Date().getFullYear();
+---
+
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+
+    <meta name="theme-color" content="#fbf9f2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#161a15" media="(prefers-color-scheme: dark)" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImageURL} />
+    <meta property="og:site_name" content={site.domain} />
+    <meta property="og:locale" content="en_GB" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL} />
+
+    <slot name="head" />
+
+    <title>{title}</title>
+
+    <style is:global>
+      /* Vineyard/safari palette — the same tokens the wedding engine serves
+         from its Firestore `theme` document, so the two sites read as one
+         brand. Token roles: sage frames, accent ornaments, primary
+         emphasises, surface washes. */
+      :root {
+        --bg: #fbf9f2;
+        --surface: #eef3ea;
+        --sage: #b9cfb2;
+        --primary: #4a9b45;
+        --secondary: #a8a259;
+        --accent: #f2c3c2;
+        --text: #30322f;
+        --muted: #656a5d; /* darkened from the brand muted for AA on body text */
+        --muted-soft: #7d8273; /* brand muted — decorative and large text only */
+        --border: #e3ded0;
+        --link: #2f6b2c;
+        --link-hover: #4a9b45;
+        --scrim: rgba(24, 28, 22, 0.42);
+      }
+
+      [data-theme='dark'] {
+        --bg: #161a15;
+        --surface: #1f251e;
+        --sage: #4d5f49;
+        --primary: #8fc98a;
+        --secondary: #c2bb7d;
+        --accent: #e8b4b3;
+        --text: #eceadf;
+        --muted: #a3a89a;
+        --muted-soft: #949a8c;
+        --border: #2f372d;
+        --link: #9ad294;
+        --link-hover: #bde3b8;
+        --scrim: rgba(10, 13, 9, 0.55);
+      }
+
+      html {
+        background-color: var(--bg);
+      }
+
+      body {
+        font-family: Georgia, 'Times New Roman', serif;
+        background-color: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        transition: background-color 0.2s, color 0.2s;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 3px;
+      }
+
+      a {
+        color: var(--link);
+      }
+      a:hover {
+        color: var(--link-hover);
+      }
+
+      /* Respect a reduced-motion preference for the hero's slow reveal. */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      .band-sage {
+        background-color: var(--sage);
+      }
+      .band-hair {
+        background-color: var(--secondary);
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.35em;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      }
+
+      .theme-toggle {
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        padding: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        transition: color 0.2s;
+      }
+      .theme-toggle:hover {
+        color: var(--text);
+      }
+      .theme-toggle svg {
+        width: 20px;
+        height: 20px;
+      }
+      .sun-icon {
+        display: block;
+      }
+      .moon-icon {
+        display: none;
+      }
+      [data-theme='dark'] .sun-icon {
+        display: none;
+      }
+      [data-theme='dark'] .moon-icon {
+        display: block;
+      }
+    </style>
+
+    <script is:inline>
+      // Runs before first paint so the correct theme is already applied —
+      // a deferred module script here would flash the light palette.
+      (function () {
+        var saved = null;
+        try {
+          saved = localStorage.getItem('theme');
+        } catch (e) {
+          /* private mode — fall back to the system preference */
+        }
+        var theme =
+          saved ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+  </head>
+
+  <body>
+    <!-- framing bands, echoing the wedding site's header treatment -->
+    <div aria-hidden="true" class="h-2 band-sage"></div>
+    <div aria-hidden="true" class="h-px band-hair"></div>
+
+    <header style="border-bottom: 1px solid var(--border);">
+      <nav class="mx-auto flex max-w-4xl items-center justify-between gap-4 px-6 py-5">
+        <a
+          href="/"
+          class="text-lg tracking-wide"
+          style="color: var(--text); text-decoration: none;"
+        >
+          {site.name}
+        </a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light or dark theme">
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="mt-24">
+      <div aria-hidden="true" class="py-5" style="background-color: var(--surface);">
+        <div aria-hidden="true" class="mx-auto h-px w-24 band-hair"></div>
+      </div>
+
+      <div class="mx-auto max-w-4xl px-6 py-8 text-center text-sm" style="color: var(--muted);">
+        <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          {site.contact.map((link) => (
+            <a href={link.href} class="hover:underline" style="text-decoration: none;">
+              {link.label}
+            </a>
+          ))}
+          {site.weddingLink && (
+            <a
+              href={site.weddingLink.href}
+              class="hover:underline"
+              style="color: var(--muted); text-decoration: none;"
+            >
+              {site.weddingLink.label}
+            </a>
+          )}
+        </div>
+        <p class="mt-4">&copy; {year} {site.name}</p>
+        <p class="mt-1 text-xs" style="color: var(--muted-soft);">
+          Photograph by{' '}
+          <a
+            href={site.photoCredit.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:underline"
+            style="color: var(--muted-soft); text-decoration: none;"
+          >
+            {site.photoCredit.photographer}
+          </a>
+        </p>
+      </div>
+
+      <div aria-hidden="true" class="h-px band-hair"></div>
+      <div aria-hidden="true" class="h-2 band-sage"></div>
+    </footer>
+
+    <script>
+      const toggleButton = document.getElementById('theme-toggle');
+
+      toggleButton?.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        try {
+          localStorage.setItem('theme', next);
+        } catch {
+          /* private mode — the choice simply will not persist */
+        }
+      });
+
+      // Follow the system if the visitor has never chosen explicitly.
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        let saved = null;
+        try {
+          saved = localStorage.getItem('theme');
+        } catch {
+          /* ignore */
+        }
+        if (!saved) {
+          document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import heroImage from '../assets/hero-winelands.jpg';
+import { site } from '../config/site';
+---
+
+<BaseLayout>
+  <Fragment slot="head">
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: site.name,
+        url: site.url,
+        description: site.description,
+        inLanguage: 'en-GB',
+      })}
+    />
+  </Fragment>
+
+  <!-- Hero -->
+  <section class="relative flex min-h-[68vh] items-center justify-center overflow-hidden">
+    <Picture
+      src={heroImage}
+      alt={site.hero.imageAlt}
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1280, 1920, 2560]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+
+    <!-- Scrim: the photograph is bright, so the copy needs a ground to sit on. -->
+    <div
+      aria-hidden="true"
+      class="absolute inset-0"
+      style="background: linear-gradient(to bottom, var(--scrim), rgba(20, 24, 18, 0.38) 45%, var(--scrim));"
+    >
+    </div>
+
+    <div
+      class="relative flex flex-col items-center gap-6 px-6 py-20 text-center text-white sm:gap-7"
+      style="text-shadow: 0 1px 12px rgba(16, 20, 14, 0.55);"
+    >
+      <div
+        class="flex h-24 w-24 items-center justify-center rounded-full border p-1.5"
+        style="border-color: var(--accent);"
+      >
+        <div
+          class="flex h-full w-full items-center justify-center rounded-full border text-2xl tracking-wide"
+          style="border-color: rgba(255, 255, 255, 0.85); color: #ffffff;"
+        >
+          {site.monogram}
+        </div>
+      </div>
+
+      {
+        site.hero.eyebrow && (
+          <p class="eyebrow text-xs sm:text-sm" style="color: rgba(255, 255, 255, 0.92);">
+            {site.hero.eyebrow}
+          </p>
+        )
+      }
+
+      <h1 class="max-w-3xl text-4xl leading-snug sm:text-6xl sm:leading-tight">
+        {site.name}
+      </h1>
+
+      <div aria-hidden="true" class="flex w-full max-w-xs items-center gap-3">
+        <span class="h-px flex-1" style="background-color: rgba(255, 255, 255, 0.6);"></span>
+        <span class="h-1.5 w-1.5 rotate-45" style="background-color: var(--accent);"></span>
+        <span class="h-px flex-1" style="background-color: rgba(255, 255, 255, 0.6);"></span>
+      </div>
+
+      {
+        site.hero.strapline && (
+          <p class="max-w-md text-sm italic sm:text-base" style="color: rgba(255, 255, 255, 0.92);">
+            {site.hero.strapline}
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <div aria-hidden="true" class="h-px band-hair"></div>
+
+  <!-- Intro -->
+  {
+    site.intro.body.length > 0 && (
+      <section class="mx-auto max-w-2xl px-6 py-16 text-center sm:py-20">
+        {site.intro.heading && (
+          <h2 class="eyebrow mb-6 text-xs sm:text-sm" style="color: var(--muted);">
+            {site.intro.heading}
+          </h2>
+        )}
+        {site.intro.body.map((paragraph) => (
+          <p class="mb-5 text-2xl last:mb-0" style="color: var(--text);">
+            {paragraph}
+          </p>
+        ))}
+      </section>
+    )
+  }
+</BaseLayout>
