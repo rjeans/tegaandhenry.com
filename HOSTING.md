@@ -1,25 +1,53 @@
 # Hosting on Cloudflare Pages
 
-Same shape as the jeansy.org deployment: connect the repo, let Cloudflare build on
-every push to `main`, attach the custom domain.
+## Current state
 
-## Stage 1: Push the repository
+The site is **live at https://tegaandhenry.pages.dev** via *direct upload*, not via
+the Git integration. This differs from jeansy.org — read the next section before
+assuming a push deploys anything.
 
-- [x] Already complete — `main` is pushed to
-  [`rjeans/tegaandhenry.com`](https://github.com/rjeans/tegaandhenry.com) (public).
+- [x] `main` pushed to
+  [`rjeans/tegaandhenry.com`](https://github.com/rjeans/tegaandhenry.com) (public)
+- [x] Pages project `tegaandhenry` created (`wrangler pages project create`)
+- [x] First deployment uploaded and verified
+- [ ] Custom domain `tegaandhenry.com` — not yet attached
 
-Note there is deliberately **no** `.github/workflows` in this repo. Publishing is
-handled by the Cloudflare Pages Git integration below, exactly as jeansy.org does
-it. Adding an Actions workflow that also ran `wrangler pages deploy` would race
-the dashboard integration and produce duplicate deployments on every push.
+## How deploys currently happen
 
-## Stage 2: Connect to Cloudflare Pages
+Manually, from a working copy:
 
-1. Go to [dash.cloudflare.com](https://dash.cloudflare.com).
-2. **Compute (Workers)** → **Workers & Pages** → **Pages** tab → **Connect to Git**.
-3. Authorise GitHub and pick the `tegaandhenry.com` repository.
+```
+npm run build
+npx wrangler pages deploy
+```
 
-## Stage 3: Build settings
+`wrangler.toml` declares `pages_build_output_dir = "./dist"`, so no arguments are
+needed. Authentication is the OAuth session from `npx wrangler login`, stored in
+`~/Library/Preferences/.wrangler/`.
+
+**Pushing to `main` deploys nothing.** There is no `.github/workflows` and no Git
+integration. `wrangler pages project list` shows `Git Provider: No` for this
+project, against `Yes` for `jeansy-org`.
+
+## Optional: make pushes deploy automatically
+
+Two mutually exclusive routes. Do not do both — they would race on every push.
+
+**A. Cloudflare Pages Git integration** (what jeansy.org uses). Cloudflare builds
+server-side and gives PR preview URLs for free. Dashboard only, because it needs a
+GitHub OAuth app install that has no API equivalent:
+
+1. [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages** →
+   the `tegaandhenry` project → **Settings** → **Builds** → connect to Git.
+2. Pick the `tegaandhenry.com` repository, then use the build settings below.
+
+**B. GitHub Actions + `wrangler pages deploy`.** Needs `CLOUDFLARE_API_TOKEN` (a
+custom token with `Account → Cloudflare Pages → Edit`) and `CLOUDFLARE_ACCOUNT_ID`
+as repository secrets. No PR previews unless a second workflow adds them, and the
+token needs rotating. Note the `gh` CLI token here lacks the `workflow` scope, so
+workflow files must be pushed over the SSH remote.
+
+## Build settings
 
 | Setting | Value |
 | --- | --- |
@@ -33,12 +61,7 @@ No environment variables and no compatibility flags are needed — the site is f
 static, so there is no Worker runtime involved. `wrangler.toml` in the repo already
 declares `pages_build_output_dir = "./dist"`.
 
-## Stage 4: Deploy
-
-**Save and Deploy.** You get a `tegaandhenry.pages.dev` URL. Check it before
-attaching the domain.
-
-## Stage 5: Custom domain
+## Custom domain
 
 1. Add `tegaandhenry.com` as a zone in Cloudflare DNS and point the registrar's
    nameservers at Cloudflare.
@@ -46,7 +69,7 @@ attaching the domain.
    `tegaandhenry.com`. Repeat for `www.tegaandhenry.com` if you want it.
 3. Cloudflare creates the DNS records and issues the certificate itself.
 
-## Stage 6: The wedding subdomain
+## The wedding subdomain
 
 `wedding.tegaandhenry.com` is **not** part of this project. It is the separate
 Next.js wedding application on Cloud Run, and it must stay that way — this repo is
@@ -68,12 +91,9 @@ Google supplies). Two things to watch:
 The only link between the two sites is the quiet footer entry driven by
 `weddingLink` in `src/config/site.ts`.
 
-## Auto-deploy
-
-Every push to `main` rebuilds and deploys. Pull requests get preview deployments on
-their own URLs.
-
 ---
 
 **Cost:** free tier is ample — two HTML pages and a handful of images.
-**Included:** automatic HTTPS, global CDN, preview deployments.
+**Included:** automatic HTTPS and the global CDN. Preview deployments and
+build-on-push are *not* included today — see "Optional: make pushes deploy
+automatically" above.

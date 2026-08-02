@@ -4,24 +4,34 @@ Outstanding work on `tegaandhenry.com`. Roughly in the order it should be done.
 
 ## 1. Get it into version control
 
-- [ ] `git init`, add a first commit, create the GitHub repository, push `main`
-- [ ] Confirm `images/` is genuinely excluded before the first commit
-      (`git status --short` should not list it; `git check-ignore -v images/` should
-      confirm the rule). Committing an 18 MB binary is hard to undo cleanly.
+- [x] `git init`, add a first commit, create the GitHub repository, push `main` —
+      now at `rjeans/tegaandhenry.com` (public)
+- [x] Confirm `images/` is genuinely excluded before the first commit —
+      `git check-ignore -v images/` reports `.gitignore:15`, `git ls-files images/`
+      is empty, and `.git` is 1.9 MB
 
 ## 2. Deploy
 
-- [ ] Create the Cloudflare Pages project and connect the GitHub repo — build
-      settings in `HOSTING.md` §3
-- [ ] Check the `*.pages.dev` URL renders correctly before attaching the domain
+- [x] Create the Cloudflare Pages project — `tegaandhenry`, created with
+      `wrangler pages project create`
+- [x] Check the `*.pages.dev` URL renders correctly before attaching the domain —
+      https://tegaandhenry.pages.dev serves 200 consistently
+- [x] Confirm HTTPS and that `/sitemap-index.xml` and `/robots.txt` are served —
+      both 200, unknown paths correctly 404
+- [ ] **Decide how pushes deploy.** The project is *direct upload*, so pushing to
+      `main` deploys nothing; deploys are manual (`npm run build && npx wrangler
+      pages deploy`). See "Optional: make pushes deploy automatically" in
+      `HOSTING.md` for the two routes.
 - [ ] Add `tegaandhenry.com` as a custom domain; decide whether `www` should
       resolve too, and redirect it if so
-- [ ] Confirm HTTPS and that `/sitemap-index.xml` and `/robots.txt` are served
+- [ ] Consider blocking indexing of `tegaandhenry.pages.dev` — `robots.txt` is
+      `Allow: /`, so the placeholder is crawlable. Canonical tags already point at
+      `tegaandhenry.com`, which limits the damage.
 
 ## 3. DNS for the wedding subdomain
 
 - [ ] Point `wedding.tegaandhenry.com` at the Cloud Run service (a separate app —
-      see `HOSTING.md` §6)
+      see "The wedding subdomain" in `HOSTING.md`)
 - [ ] Keep the record **DNS-only / grey cloud** while the Google-managed
       certificate provisions; if proxying later, set SSL/TLS to **Full (strict)**
 - [ ] **Do not** add `wedding.tegaandhenry.com` as a custom domain on this Pages
