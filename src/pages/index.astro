@@ -97,11 +97,23 @@ import { site } from '../config/site';
             {site.intro.heading}
           </h2>
         )}
-        {site.intro.body.map((paragraph) => (
-          <p class="mb-5 text-2xl last:mb-0" style="color: var(--text);">
-            {paragraph}
-          </p>
-        ))}
+        {site.intro.body.map((paragraph) => {
+          // The link phrase is spliced out of the plain string rather than
+          // stored as markup, so the config file stays free of HTML.
+          const href = site.weddingLink?.href;
+          const phrase = site.intro.linkPhrase;
+          const at = href && phrase ? paragraph.indexOf(phrase) : -1;
+
+          return (
+            <p class="mb-5 text-2xl last:mb-0" style="color: var(--text);">
+              {/* Kept on one line: newlines between these expressions would
+                  collapse to spaces and strand the full stop. */}
+              {at === -1 ? paragraph : (
+                <>{paragraph.slice(0, at)}<a href={href} style="text-underline-offset: 0.2em;">{phrase}</a>{paragraph.slice(at + phrase.length)}</>
+              )}
+            </p>
+          );
+        })}
       </section>
     )
   }

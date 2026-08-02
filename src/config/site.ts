@@ -28,17 +28,18 @@ export const site = {
   intro: {
     /** Small uppercase line above the body copy. Empty string hides it. */
     heading: '',
-    /**
-     * One entry per paragraph. An empty array hides the section entirely.
-     *
-     * Placeholder copy — deliberately says nothing that is not already true,
-     * so it can stand indefinitely without becoming wrong. Replace it with
-     * Tega and Henry's own words.
-     */
+    /** One entry per paragraph. An empty array hides the section entirely. */
     body: [
-      'A place for our news, our photographs, and whatever we happen to be up to.',
+      'A place for our news, our photographs, and of course our Wedding in 2028.',
       'Still being put together — do come back.',
     ],
+    /**
+     * Where this phrase appears in `body`, it renders as a link to
+     * `weddingLink` rather than plain text. Set `weddingLink` to null and the
+     * phrase quietly falls back to plain text, so the sentence still reads
+     * correctly while the wedding site is not yet worth linking to.
+     */
+    linkPhrase: 'Wedding in 2028',
   },
 
   /** Rendered as small links in the footer. Delete any you do not want. */
@@ -47,8 +48,9 @@ export const site = {
   ] as Array<{ label: string; href: string }>,
 
   /**
-   * Quiet pointer to the (separately hosted, authenticated) wedding site for
-   * guests who have mislaid their invitation email. Set to null to remove it.
+   * The separately hosted wedding site. Its landing page is public, so this is
+   * an ordinary link — both the footer entry and `intro.linkPhrase` in the body
+   * copy point at it. Set to null to remove both at once.
    */
   weddingLink: {
     label: 'Wedding',
