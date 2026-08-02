@@ -52,16 +52,31 @@ and redo step 1.
 | Production branch | `main` |
 | Framework preset | Astro |
 | Build command | `npm run build` |
+| Deploy command | *(leave empty)* |
 | Build output directory | `dist` |
 | Root directory | `/` (leave empty) |
+| Builds for non-production branches | All non-Production branches |
 
 The project name feeds the `*.pages.dev` subdomain, so it is `tegaandhenry`, not
 `tegaandhenry.com` — project names cannot contain dots, though the repository is
 named with one.
 
+**Deploy command must stay empty.** It is a Workers field that the unified builds
+UI also shows for Pages. Pages uploads the build output directory itself, so a
+deploy command is redundant at best. Note `jeansy.org`'s `HOSTING.md` lists
+`npm run build` here — that is wrong, and merely runs its build twice. Setting
+`wrangler pages deploy` would be worse: competing deployments on every push.
+
+**Builds for non-production branches** is what produces preview deployments, one
+URL per branch, which is the main reason for using the Git integration rather than
+GitHub Actions. Setting it to *None* discards that. The free plan allows 500 builds
+a month, far beyond anything this site will use. If automated dependency PRs later
+become noisy, the custom option supports include `*` with exclude `dependabot/*`.
+
 No environment variables and no compatibility flags are needed — the site is fully
 static, so there is no Worker runtime involved. `wrangler.toml` in the repo already
-declares `pages_build_output_dir = "./dist"`.
+declares `pages_build_output_dir = "./dist"`, which is what lets a manual
+`npx wrangler pages deploy` run with no arguments.
 
 ## Custom domain
 
