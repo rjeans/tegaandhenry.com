@@ -5,7 +5,13 @@ every push to `main`, attach the custom domain.
 
 ## Stage 1: Push the repository
 
-Create a GitHub repository (`tegaandhenry`) and push `main`.
+- [x] Already complete — `main` is pushed to
+  [`rjeans/tegaandhenry`](https://github.com/rjeans/tegaandhenry) (public).
+
+Note there is deliberately **no** `.github/workflows` in this repo. Publishing is
+handled by the Cloudflare Pages Git integration below, exactly as jeansy.org does
+it. Adding an Actions workflow that also ran `wrangler pages deploy` would race
+the dashboard integration and produce duplicate deployments on every push.
 
 ## Stage 2: Connect to Cloudflare Pages
 
