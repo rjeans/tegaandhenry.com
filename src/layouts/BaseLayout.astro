@@ -51,8 +51,10 @@ const year = new Date().getFullYear();
     <style is:global>
       /* Vineyard/safari palette — the same tokens the wedding engine serves
          from its Firestore `theme` document, so the two sites read as one
-         brand. Token roles: sage frames, accent ornaments, primary
-         emphasises, surface washes. */
+         brand. Token roles: accent ornaments, primary emphasises, surface
+         washes. `--sage` is currently unused — the bands it framed the page
+         with were removed — but is kept so the palette stays in step with the
+         wedding site's. */
       :root {
         --bg: #fbf9f2;
         --surface: #eef3ea;
@@ -120,9 +122,6 @@ const year = new Date().getFullYear();
         }
       }
 
-      .band-sage {
-        background-color: var(--sage);
-      }
       .band-hair {
         background-color: var(--secondary);
       }
@@ -183,8 +182,8 @@ const year = new Date().getFullYear();
   </head>
 
   <body>
-    <!-- framing bands, echoing the wedding site's header treatment -->
-    <div aria-hidden="true" class="h-2 band-sage"></div>
+    <!-- A single hairline frames the page top and bottom. The thicker sage
+         bands that echoed the wedding site's header treatment were removed. -->
     <div aria-hidden="true" class="h-px band-hair"></div>
 
     <header style="border-bottom: 1px solid var(--border);">
@@ -249,7 +248,6 @@ const year = new Date().getFullYear();
       </div>
 
       <div aria-hidden="true" class="h-px band-hair"></div>
-      <div aria-hidden="true" class="h-2 band-sage"></div>
     </footer>
 
     <script>

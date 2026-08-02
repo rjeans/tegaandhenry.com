@@ -1,4 +1,9 @@
-name = "tegaandhenry"
+# Must match the Pages project exactly. Cloudflare derived the name from the
+# repository (tegaandhenry.com -> tegaandhenry-com) since project names cannot
+# contain dots. A mismatch here would make `wrangler pages deploy` target a
+# project that does not exist — and offer to create it, which would produce a
+# second, Direct Upload project.
+name = "tegaandhenry-com"
 compatibility_date = "2026-08-02"
 
 pages_build_output_dir = "./dist"

@@ -7,7 +7,10 @@ repository, builds on every push to `main`, and serves the result.
 
 - [x] `main` pushed to
   [`rjeans/tegaandhenry.com`](https://github.com/rjeans/tegaandhenry.com) (public)
-- [ ] **Pages project not yet created** — do the Git connection below
+- [x] Pages project `tegaandhenry-com` created through the dashboard Git flow;
+  `wrangler pages project list` reports `Git Provider: Yes`
+- [x] Live at **https://tegaandhenry-com.pages.dev** — every push to `main`
+  rebuilds, and every other branch gets its own preview URL
 - [ ] Custom domain `tegaandhenry.com` — not yet attached
 
 ## A note on Direct Upload
@@ -48,7 +51,7 @@ and redo step 1.
 
 | Setting | Value |
 | --- | --- |
-| Project name | `tegaandhenry` |
+| Project name | `tegaandhenry-com` |
 | Production branch | `main` |
 | Framework preset | Astro |
 | Build command | `npm run build` |
@@ -57,9 +60,10 @@ and redo step 1.
 | Root directory | `/` (leave empty) |
 | Builds for non-production branches | All non-Production branches |
 
-The project name feeds the `*.pages.dev` subdomain, so it is `tegaandhenry`, not
-`tegaandhenry.com` — project names cannot contain dots, though the repository is
-named with one.
+The project name feeds the `*.pages.dev` subdomain and cannot contain dots, so
+Cloudflare derived `tegaandhenry-com` from the repository name. The site is
+therefore served at **https://tegaandhenry-com.pages.dev**, and `wrangler.toml`
+must carry that exact name or a manual `wrangler pages deploy` will miss.
 
 **Deploy command must stay empty.** It is a Workers field that the unified builds
 UI also shows for Pages. Pages uploads the build output directory itself, so a

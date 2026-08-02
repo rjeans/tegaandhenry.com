@@ -28,8 +28,17 @@ export const site = {
   intro: {
     /** Small uppercase line above the body copy. Empty string hides it. */
     heading: '',
-    /** One entry per paragraph. An empty array hides the section entirely. */
-    body: ['Hello'],
+    /**
+     * One entry per paragraph. An empty array hides the section entirely.
+     *
+     * Placeholder copy — deliberately says nothing that is not already true,
+     * so it can stand indefinitely without becoming wrong. Replace it with
+     * Tega and Henry's own words.
+     */
+    body: [
+      'A place for our news, our photographs, and whatever we happen to be up to.',
+      'Still being put together — do come back.',
+    ],
   },
 
   /** Rendered as small links in the footer. Delete any you do not want. */

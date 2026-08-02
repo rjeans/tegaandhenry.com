@@ -12,21 +12,18 @@ Outstanding work on `tegaandhenry.com`. Roughly in the order it should be done.
 
 ## 2. Deploy
 
-- [ ] **Create the Pages project via the dashboard Git flow** — build settings in
-      `HOSTING.md`. Do *not* use `wrangler pages project create`: that makes a
-      Direct Upload project, which can never be switched to the Git integration.
-      A wrangler-made project was created and deleted for exactly this reason.
-- [ ] Confirm `wrangler pages project list` reports `Git Provider: Yes`
+- [x] **Create the Pages project via the dashboard Git flow** — done, project is
+      `tegaandhenry-com`, `Git Provider: Yes`. Do *not* use `wrangler pages
+      project create`: that makes a Direct Upload project, which can never be
+      switched to the Git integration.
+- [x] Verify the deployment — `/` serves 200, `/robots.txt` and
+      `/sitemap-index.xml` 200, unknown paths 404, canonical and `og:url` point
+      at `tegaandhenry.com`
 - [ ] Add `tegaandhenry.com` as a custom domain; decide whether `www` should
       resolve too, and redirect it if so
-- [ ] Consider blocking indexing of `tegaandhenry.pages.dev` — `robots.txt` is
-      `Allow: /`, so the placeholder copy would be crawlable. Canonical tags
-      already point at `tegaandhenry.com`, which limits the damage.
-
-A previous deployment confirmed the build is sound: `/` served 200 consistently,
-`/robots.txt` and `/sitemap-index.xml` both 200, unknown paths 404, and canonical
-and `og:url` tags correctly pointed at `tegaandhenry.com`. Re-check after the Git
-connection, since that deployment has been deleted.
+- [ ] Consider blocking indexing of `tegaandhenry-com.pages.dev` — `robots.txt`
+      is `Allow: /`, so the placeholder copy is crawlable. Canonical tags already
+      point at `tegaandhenry.com`, which limits the damage.
 
 ## 3. DNS for the wedding subdomain
 
@@ -41,7 +38,9 @@ connection, since that deployment has been deleted.
 
 Everything below is one edit to `src/config/site.ts`. No component changes needed.
 
-- [ ] Replace the placeholder `"Hello"` with real copy from Tega and Henry
+- [ ] Replace the holding copy in `intro.body` with real words from Tega and
+      Henry. It currently says only that the site is being put together, which
+      is safe to leave up but says nothing.
 - [ ] Decide whether to restore `hero.eyebrow` and `hero.strapline` (currently
       empty strings, which hides them)
 - [ ] Decide on `contact` — currently an empty array, so no contact links render
