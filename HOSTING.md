@@ -9,30 +9,31 @@ repository, builds on every push to `main`, and serves the result.
   [`rjeans/tegaandhenry.com`](https://github.com/rjeans/tegaandhenry.com) (public)
 - [x] Pages project `tegaandhenry-com` created through the dashboard Git flow;
   `wrangler pages project list` reports `Git Provider: Yes`
-- [x] Live at **https://tegaandhenry-com.pages.dev**
-- [ ] Custom domain `tegaandhenry.com` — registered on the project but **pending**,
-  awaiting a DNS record (see "Custom domain")
-- [ ] **Push-to-deploy is not actually working** (see "Builds are not triggering")
+- [x] Live at **https://tegaandhenry.com** and
+  **https://tegaandhenry-com.pages.dev**, custom domain `active` with a valid
+  certificate
+- [x] Push-to-deploy works — confirmed by a deployment carrying
+  `deployment_trigger.type: github:push`, built within ~20 seconds of the push
+- [ ] `www.tegaandhenry.com` — not configured; still a decision
 
-## Builds are not triggering
+## If builds stop triggering
 
-Every deployment so far has `deployment_trigger.type: ad_hoc` — one from project
-creation, one forced through the API. A build started by a push would read
-`github:push`. **No push has ever triggered a build.**
+This failed once during setup and is worth recognising. The symptom is that
+pushes land on GitHub but no build starts, and every deployment in the list reads
+`deployment_trigger.type: ad_hoc` rather than `github:push`:
 
-The Git connection itself is sound: the project has `deployments_enabled: true`,
-`production_branch: main`, the right repository, and Cloudflare successfully
-fetched a commit that had only just been pushed. So Cloudflare can *read* the
-repository; push *events* are not reaching it.
+```
+npx wrangler pages deployment list --project-name tegaandhenry-com
+```
 
-That points at the GitHub App rather than the Pages project. Worth checking:
+The cause was on the GitHub App side, not the Pages project — Cloudflare could
+*read* the repository (it fetched a just-pushed commit on demand) while push
+*events* never reached it. Check GitHub → **Settings** → **Applications** →
+**Cloudflare Pages** → **Configure**, and confirm this repository is in its access
+list; an app scoped to selected repositories will not include one created after it
+was installed.
 
-- GitHub → **Settings** → **Applications** → **Cloudflare Pages** → confirm the
-  app has access to `tegaandhenry.com`, not just to other repositories.
-- The Pages project → **Settings** → **Builds** → reconnect if the link looks
-  stale.
-
-Until it works, a deployment can be forced without the dashboard:
+A deployment can be forced meanwhile:
 
 ```
 curl -X POST -H "Authorization: Bearer $CF_TOKEN" \
@@ -117,13 +118,8 @@ declares `pages_build_output_dir = "./dist"`, which is what lets a manual
 The zone `tegaandhenry.com` is already active in the account on the
 `kevin`/`lindsey` nameservers, so no registrar work is needed.
 
-`tegaandhenry.com` has been added to the Pages project and sits at status
-**pending**, because **no DNS record exists at the apex yet**. Adding a custom
-domain through the REST API registers the hostname but does *not* create the
-record; the dashboard flow does both. Until the record exists, validation cannot
-complete and no certificate is issued.
-
-To finish, add this record under the zone's **DNS** tab:
+`tegaandhenry.com` is attached to the Pages project, status `active`, serving over
+HTTPS with a certificate issued for the apex. The record is:
 
 | Field | Value |
 | --- | --- |
@@ -133,8 +129,12 @@ To finish, add this record under the zone's **DNS** tab:
 | Proxy status | **Proxied** (orange cloud) |
 
 Cloudflare flattens the apex CNAME automatically, so this is valid at the root
-despite what the DNS spec would otherwise allow. Validation and the certificate
-follow within a few minutes.
+despite what the DNS spec would otherwise allow.
+
+One trap if this is ever redone: adding a custom domain through the **REST API**
+registers the hostname but does *not* create the DNS record, leaving the domain
+stuck at `pending` with no certificate. The dashboard flow does both. Add the
+record by hand if the API route is used.
 
 `www` is a separate decision and is not currently configured. To make it resolve,
 add it as a second custom domain and redirect it to the apex with a redirect rule.

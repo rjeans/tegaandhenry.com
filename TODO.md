@@ -19,19 +19,21 @@ Outstanding work on `tegaandhenry.com`. Roughly in the order it should be done.
 - [x] Verify the deployment — `/` serves 200, `/robots.txt` and
       `/sitemap-index.xml` 200, unknown paths 404, canonical and `og:url` point
       at `tegaandhenry.com`
-- [ ] **Add the apex DNS record** — `tegaandhenry.com` is registered on the Pages
-      project but pending, because the API does not create the record the way the
-      dashboard does. Exact record in `HOSTING.md` under "Custom domain".
-- [ ] **Fix push-to-deploy** — no push has ever triggered a build; every
-      deployment so far was `ad_hoc`. See "Builds are not triggering" in
-      `HOSTING.md`. Without this the Git integration gives nothing that a manual
-      deploy would not.
+- [x] **Apex DNS** — `tegaandhenry.com` is live and the custom domain reports
+      `active`, with a valid certificate
+- [x] **Push-to-deploy works** — confirmed by a deployment carrying
+      `deployment_trigger.type: github:push`, built within ~20s of the push.
+      Earlier deployments were `ad_hoc` and predate the fix.
 - [ ] Decide whether `www.tegaandhenry.com` should resolve, and redirect it if so
 - [ ] Consider blocking indexing of `tegaandhenry-com.pages.dev` — `robots.txt`
       is `Allow: /`, so the placeholder copy is crawlable. Canonical tags already
       point at `tegaandhenry.com`, which limits the damage.
 
 ## 3. DNS for the wedding subdomain
+
+**Under review.** This site now stands in for the full wedding site, so whether
+`wedding.tegaandhenry.com` is still wanted is an open question. Everything in this
+section assumes the original two-site split and should be confirmed before acting.
 
 - [ ] Point `wedding.tegaandhenry.com` at the Cloud Run service (a separate app —
       see "The wedding subdomain" in `HOSTING.md`)
@@ -50,8 +52,8 @@ Everything below is one edit to `src/config/site.ts`. No component changes neede
 - [ ] Decide whether to restore `hero.eyebrow` and `hero.strapline` (currently
       empty strings, which hides them)
 - [ ] Decide on `contact` — currently an empty array, so no contact links render
-- [ ] Confirm the footer `weddingLink` should stay (set to `null` to remove it,
-      e.g. once the wedding has passed)
+- [x] `weddingLink` is `null` — no nav item, no footer entry, and `Wedding in
+      2028` renders as plain text rather than a link
 - [ ] Confirm `description` — it feeds the `<meta>` tag and the Open Graph card
 - [ ] Consider a personal photograph in place of the stock Unsplash hero. If it
       changes: replace `src/assets/hero-winelands.jpg`, update `hero.imageAlt` and

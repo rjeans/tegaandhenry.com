@@ -48,14 +48,18 @@ export const site = {
   ] as Array<{ label: string; href: string }>,
 
   /**
-   * The separately hosted wedding site. Its landing page is public, so this is
-   * an ordinary link — both the footer entry and `intro.linkPhrase` in the body
-   * copy point at it. Set to null to remove both at once.
+   * Link to the separately hosted wedding site. Currently null: this site is
+   * itself standing in for the full wedding site, so there is nowhere worth
+   * sending people yet.
+   *
+   * Setting it restores three things at once — the header nav item, the footer
+   * entry, and the linked phrase in the intro copy (see `intro.linkPhrase`).
+   * While it is null the phrase renders as ordinary text, so the sentence still
+   * reads correctly and no dead link is left behind.
+   *
+   *   weddingLink: { label: 'Wedding', href: 'https://wedding.tegaandhenry.com' },
    */
-  weddingLink: {
-    label: 'Wedding',
-    href: 'https://wedding.tegaandhenry.com',
-  } as { label: string; href: string } | null,
+  weddingLink: null as { label: string; href: string } | null,
 
   /** Unsplash does not require attribution, but the photographer deserves it. */
   photoCredit: {

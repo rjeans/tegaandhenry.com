@@ -23,10 +23,12 @@ application:
 | Stack | Astro 5, static | Next.js 15 App Router, Firestore, Firebase Auth |
 | Host | Cloudflare Pages | Cloud Run |
 | Domain | `tegaandhenry.com` | `wedding.tegaandhenry.com` |
-| Access | Public | Authenticated (magic links, tokenised RSVP) |
+| Access | Public | Public landing page, authenticated beyond it (magic links, tokenised RSVP) |
 
-The only connection between them is a quiet footer link, driven by `weddingLink`
-in `src/config/site.ts`. Do not import code, config, or content between the two.
+There is currently **no link between them at all**: `weddingLink` in
+`src/config/site.ts` is `null`, because this site is for now standing in for the
+full wedding site. Do not import code, config, or content between the two, and do
+not reinstate the link without being asked.
 
 Note that the wedding repo is a **generic, content-free engine** with a hard rule
 against couple names or PII appearing anywhere in its source. This repo is the
@@ -53,7 +55,7 @@ inventing a new pattern.
   currently has none.
 - **Never add `wedding.tegaandhenry.com` as a custom domain on the Pages project.**
   It would route the subdomain to this static site and take the wedding
-  application offline. See `HOSTING.md` §6.
+  application offline. See "The wedding subdomain" in `HOSTING.md`.
 - **Respect the contrast decisions.** `--muted` is intentionally darker than the
   wedding engine's brand muted (`#7d8273`, only 3.75:1 on cream — below AA for
   body text); the original is kept as `--muted-soft` for large/decorative use.

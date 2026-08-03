@@ -3,9 +3,10 @@
 The permanent home page for Tega and Henry. A single-page Astro site, statically
 built and served from Cloudflare Pages.
 
-It is deliberately separate from the wedding site: this one is public, permanent,
-and outlives the wedding. The wedding site is a different application, hosted at
-`wedding.tegaandhenry.com` behind authentication.
+It is deliberately separate from the wedding site, which is a different
+application hosted at `wedding.tegaandhenry.com`. For the time being this site
+also *stands in* for that one, so there is no link between them: `weddingLink` in
+`src/config/site.ts` is `null`.
 
 Outstanding work is tracked in [`TODO.md`](TODO.md). Context for AI coding
 sessions is in [`GEMINI.md`](GEMINI.md).
@@ -40,8 +41,11 @@ editing that one file — no component needs touching.
 
 Notable switches in there:
 
-- `weddingLink` — the quiet footer pointer to `wedding.tegaandhenry.com`, for
-  guests who mislay their invitation email. Set it to `null` to remove it entirely.
+- `weddingLink` — currently `null`. Setting it to `{ label, href }` restores three
+  things at once: the header nav item, the footer entry, and the link on the phrase
+  named by `intro.linkPhrase` (`Wedding in 2028`) in the body copy. While it is
+  `null` that phrase renders as ordinary text, so the sentence still reads
+  correctly and no dead link is left behind.
 - `contact` — an empty array by default. Add `{ label, href }` entries to show
   contact or social links in the footer.
 
