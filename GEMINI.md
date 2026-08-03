@@ -2,11 +2,26 @@
 
 Context for AI coding sessions working in this repository.
 
-## What this is
+> ## ⚠ SUPERSEDED — this site no longer serves the apex domain
+>
+> As of 2026-08-03 the **wedding application serves `tegaandhenry.com`
+> directly** (wedding repo, ADR-020): public landing page, household RSVP
+> links, guest sign-in and admin console, all on one origin. There is no
+> longer a `wedding.` subdomain.
+>
+> That application's landing page renders from Firestore `content` and
+> `theme`, so the couple edit the words, the photograph and the palette from
+> the console with no deploy — which this site could not do.
+>
+> **Do not point this project at the apex domain**, and do not resume work
+> here expecting it to be the live site. It is kept as reference and as a
+> possible post-wedding home. See "Retirement" below.
 
-The **permanent, public home page for `tegaandhenry.com`** — a single-page Astro
-site, statically built, served from Cloudflare Pages. It is meant to outlive the
-wedding and become the couple's long-term personal site.
+## What this WAS
+
+The permanent, public home page for the apex domain — a single-page Astro
+site, statically built, served from Cloudflare Pages, intended to outlive the
+wedding.
 
 It is deliberately tiny: a hero photograph, the couple's name, and one line of
 copy. Resist the urge to grow it. Sections get added when there is something real
@@ -22,8 +37,8 @@ application:
 | Where | `~/Development/tegaandhenry.com` | `~/Development/wedding` |
 | Stack | Astro 5, static | Next.js 15 App Router, Firestore, Firebase Auth |
 | Host | Cloudflare Pages | Cloud Run |
-| Domain | `tegaandhenry.com` | `wedding.tegaandhenry.com` |
-| Access | Public | Public landing page, authenticated beyond it (magic links, tokenised RSVP) |
+| Domain | none (retired) | `tegaandhenry.com` |
+| Access | n/a | Public landing page; RSVP behind a household token or a signed-in session |
 
 There is currently **no link between them at all**: `weddingLink` in
 `src/config/site.ts` is `null`, because this site is for now standing in for the
@@ -53,9 +68,10 @@ inventing a new pattern.
   seems to need a server, say so explicitly and get a decision before adding
   `@astrojs/cloudflare` — that change has real operational cost for a site that
   currently has none.
-- **Never add `wedding.tegaandhenry.com` as a custom domain on the Pages project.**
-  It would route the subdomain to this static site and take the wedding
-  application offline. See "The wedding subdomain" in `HOSTING.md`.
+- **Never add `tegaandhenry.com` (or any subdomain of it) as a custom domain on
+  this Pages project.** The apex now points at the wedding application on Cloud
+  Run; claiming it here would take the live site — landing page, RSVP links and
+  console — offline in one step.
 - **Respect the contrast decisions.** `--muted` is intentionally darker than the
   wedding engine's brand muted (`#7d8273`, only 3.75:1 on cream — below AA for
   body text); the original is kept as `--muted-soft` for large/decorative use.
@@ -102,11 +118,15 @@ npx astro check   # typecheck; must be 0 errors, 0 warnings, 0 hints
 6. `README.md` updated if the palette, image pipeline, or structure changed;
    `HOSTING.md` updated if deployment or DNS behaviour changed.
 
-## Current state
+## Retirement
 
-The site is built and rendering correctly in both themes, but **not yet
-initialised as a git repository and not yet deployed**. See `TODO.md` for the
-outstanding work.
+The site builds and renders correctly; it simply is not the live site any more.
 
-The copy is a deliberate placeholder — the body is the single word "Hello",
-awaiting real content from the couple.
+To retire it cleanly: remove the custom domain from the Cloudflare Pages
+project, then point the apex DNS at the wedding application's Cloud Run
+service. Leaving the domain attached here is the dangerous state — whichever
+DNS record wins decides which site guests reach, and this one has no RSVP.
+
+Keep or delete the Pages project as you prefer. It costs nothing to keep, and
+it remains a reasonable starting point for a post-wedding personal site once
+the wedding application is no longer wanted at the apex.

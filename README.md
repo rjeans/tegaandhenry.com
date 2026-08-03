@@ -1,12 +1,13 @@
 # tegaandhenry.com
 
-The permanent home page for Tega and Henry. A single-page Astro site, statically
-built and served from Cloudflare Pages.
+> **⚠ Superseded (2026-08-03).** The wedding application now serves
+> `tegaandhenry.com` directly — public landing page, household RSVP links,
+> guest sign-in and admin console on one origin. There is no `wedding.`
+> subdomain any more. This site is retained as reference and as a possible
+> post-wedding home; see "Retirement" in `GEMINI.md`. **Do not attach the apex
+> domain to this Pages project** — it would take the live site offline.
 
-It is deliberately separate from the wedding site, which is a different
-application hosted at `wedding.tegaandhenry.com`. For the time being this site
-also *stands in* for that one, so there is no link between them: `weddingLink` in
-`src/config/site.ts` is `null`.
+A single-page Astro site, statically built and served from Cloudflare Pages.
 
 Outstanding work is tracked in [`TODO.md`](TODO.md). Context for AI coding
 sessions is in [`GEMINI.md`](GEMINI.md).

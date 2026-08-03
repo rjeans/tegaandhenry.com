@@ -1,5 +1,25 @@
 # TODO
 
+> **⚠ This project no longer serves `tegaandhenry.com`.** As of 2026-08-03 the
+> wedding application serves the apex directly (wedding repo, ADR-020). The
+> deploy and DNS sections below are superseded — the only outstanding work here
+> is retiring the domain from this project. See "Retirement" in `GEMINI.md`.
+
+## 0. Retirement (do this first)
+
+- [ ] **Remove `tegaandhenry.com` from this Pages project's custom domains.**
+      While it is attached here, whichever DNS record wins decides which site
+      guests reach — and this one has no RSVP.
+- [ ] Point the apex DNS at the wedding application's Cloud Run service.
+- [ ] Verify: apex serves the hero + names + date + "Already invited? Sign in",
+      and a household invite link resolves.
+- [ ] Decide whether to keep the Pages project (free, and a reasonable starting
+      point for a post-wedding personal site) or delete it.
+
+---
+
+Everything below predates the change and is kept for reference only.
+
 Outstanding work on `tegaandhenry.com`. Roughly in the order it should be done.
 
 ## 1. Get it into version control
