@@ -1,13 +1,16 @@
 # tegaandhenry.com
 
-> **⚠ Superseded (2026-08-03).** The wedding application now serves
-> `tegaandhenry.com` directly — public landing page, household RSVP links,
-> guest sign-in and admin console on one origin. There is no `wedding.`
-> subdomain any more. This site is retained as reference and as a possible
-> post-wedding home; see "Retirement" in `GEMINI.md`. **Do not attach the apex
-> domain to this Pages project** — it would take the live site offline.
+**Live at [tegaandhenry.com](https://tegaandhenry.com).** A single-page Astro
+site, statically built and served from Cloudflare Pages.
 
-A single-page Astro site, statically built and served from Cloudflare Pages.
+> **Planned handover.** When the wedding application is ready it will take the
+> apex domain — landing page, household RSVP links, guest sign-in and admin
+> console on one origin, editable from its console without a deploy. There is no
+> `wedding.` subdomain and none is planned. **That handover has not happened:
+> this site serves the apex today, so do not detach the domain from this Pages
+> project.** After the wedding the intention is to move it back here as the
+> couple's long-term personal page. Steps in
+> ["The planned handover"](GEMINI.md) in `GEMINI.md`.
 
 Outstanding work is tracked in [`TODO.md`](TODO.md). Context for AI coding
 sessions is in [`GEMINI.md`](GEMINI.md).

@@ -136,37 +136,61 @@ registers the hostname but does *not* create the DNS record, leaving the domain
 stuck at `pending` with no certificate. The dashboard flow does both. Add the
 record by hand if the API route is used.
 
-`www` is a separate decision and is not currently configured. To make it resolve,
-add it as a second custom domain and redirect it to the apex with a redirect rule.
+`www.tegaandhenry.com` has no DNS record and does not resolve. To change that, add
+it as a second custom domain and redirect it to the apex with a redirect rule.
 
 Note the certificate authority for this domain is Google, not Cloudflare — that is
 simply which CA the Pages certificate pipeline picked, and needs no action.
 
-## The wedding subdomain
+## The planned handover of the apex
 
-`wedding.tegaandhenry.com` is **not** part of this project. It is the separate
-Next.js wedding application on Cloud Run, and it must stay that way — this repo is
-public and static, that one is authenticated.
+There is **no `wedding.tegaandhenry.com`** — the hostname has no DNS record, and
+the earlier plan to run the wedding application on a subdomain has been dropped.
+Under ADR-020 in the wedding repository, the wedding application will serve
+`tegaandhenry.com` itself: landing page, household RSVP links, guest sign-in and
+admin console all on one origin.
 
-In the same Cloudflare DNS zone, add a record for `wedding` pointing at the Cloud
-Run service (a `CNAME` to the Cloud Run domain mapping, or the mapping records
-Google supplies). Two things to watch:
+**That handover has not happened.** Today the apex is attached to this Pages
+project and serves this site. Both facts are checkable:
 
-- **Proxy status.** Cloud Run domain mappings manage their own certificate. Add the
-  record **DNS-only** (grey cloud) while the Google-managed certificate is
-  provisioning; only turn the orange cloud on afterwards if you actually want
-  Cloudflare in front, and then set SSL/TLS mode to **Full (strict)** — anything
-  less will break or downgrade the connection.
-- **Do not** add `wedding.tegaandhenry.com` as a custom domain on this Pages
-  project. That would route the subdomain to the static site and take the wedding
-  application offline.
+```
+npx wrangler pages project list          # tegaandhenry.com listed against tegaandhenry-com
+curl -s https://tegaandhenry.com/ | grep '<title>'
+```
 
-The only link between the two sites is the quiet footer entry driven by
-`weddingLink` in `src/config/site.ts`.
+When the cutover does happen, the order matters: remove `tegaandhenry.com` from
+this project's custom domains *first*, then point the apex at the wedding
+application's Cloud Run service. Leaving it attached in both places is the
+dangerous state, because whichever record wins decides which site guests reach —
+and this one has no RSVP.
+
+Until then, **do not detach the apex from this project.** It is the live site.
+
+After the wedding, the intention is for this repo to take the apex back as the
+couple's long-term personal page.
+
+## Git authentication
+
+The remote is HTTPS, and `gh` supplies the credential:
+
+```
+git remote -v                             # https://github.com/rjeans/tegaandhenry.com.git
+git config --global --get-regexp credential
+                                          # !gh auth git-credential
+```
+
+This is deliberate. The repository was originally on an SSH remote signed through
+1Password's agent, which locks on a timer and cannot be unlocked by an automated
+session — it blocked two pushes mid-task. Routing git through `gh` removes that
+failure mode.
+
+One consequence: the `gh` token carries `gist`, `read:org` and `repo`, but **not
+`workflow`**. Over HTTPS, GitHub rejects any push that adds or changes a file
+under `.github/workflows/`. Nothing here needs one, since Cloudflare builds on
+push — but run `gh auth refresh -s workflow` first if that ever changes.
 
 ---
 
 **Cost:** free tier is ample — two HTML pages and a handful of images.
-**Included:** automatic HTTPS and the global CDN. Preview deployments and
-build-on-push are *not* included today — see "Optional: make pushes deploy
-automatically" above.
+**Included:** automatic HTTPS, the global CDN, build-on-push, and a preview
+deployment per branch.

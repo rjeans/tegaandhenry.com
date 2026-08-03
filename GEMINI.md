@@ -2,26 +2,35 @@
 
 Context for AI coding sessions working in this repository.
 
-> ## ⚠ SUPERSEDED — this site no longer serves the apex domain
+> ## ⚠ This site is live, and a handover is planned
 >
-> As of 2026-08-03 the **wedding application serves `tegaandhenry.com`
-> directly** (wedding repo, ADR-020): public landing page, household RSVP
-> links, guest sign-in and admin console, all on one origin. There is no
-> longer a `wedding.` subdomain.
+> **Right now this project serves `tegaandhenry.com`.** The apex is attached to
+> the `tegaandhenry-com` Pages project and returns this site. Verify before
+> acting on anything below:
 >
-> That application's landing page renders from Firestore `content` and
-> `theme`, so the couple edit the words, the photograph and the palette from
-> the console with no deploy — which this site could not do.
+> ```
+> npx wrangler pages project list
+> curl -s https://tegaandhenry.com/ | grep '<title>'
+> ```
 >
-> **Do not point this project at the apex domain**, and do not resume work
-> here expecting it to be the live site. It is kept as reference and as a
-> possible post-wedding home. See "Retirement" below.
+> **Planned:** under ADR-020 in the wedding repository, the wedding application
+> will take `tegaandhenry.com` directly — landing page, household RSVP links,
+> guest sign-in and admin console on one origin. That application renders its
+> landing page from Firestore `content` and `theme`, so the couple can edit the
+> words, the photograph and the palette from the console with no deploy, which
+> this site cannot do. There is no `wedding.` subdomain and none is planned.
+>
+> **The handover has not happened, and is not to be carried out yet** — it waits
+> on the wedding application being ready. Until then, do not detach the apex from
+> this project: doing so takes the live site off the internet.
+>
+> **After the wedding**, this repo is intended to take the apex back as the
+> couple's long-term personal page. It is not a dead project.
 
-## What this WAS
+## What this is
 
-The permanent, public home page for the apex domain — a single-page Astro
-site, statically built, served from Cloudflare Pages, intended to outlive the
-wedding.
+The public home page for `tegaandhenry.com` — a single-page Astro site,
+statically built, served from Cloudflare Pages, intended to outlive the wedding.
 
 It is deliberately tiny: a hero photograph, the couple's name, and one line of
 copy. Resist the urge to grow it. Sections get added when there is something real
@@ -37,13 +46,14 @@ application:
 | Where | `~/Development/tegaandhenry.com` | `~/Development/wedding` |
 | Stack | Astro 5, static | Next.js 15 App Router, Firestore, Firebase Auth |
 | Host | Cloudflare Pages | Cloud Run |
-| Domain | none (retired) | `tegaandhenry.com` |
-| Access | n/a | Public landing page; RSVP behind a household token or a signed-in session |
+| Domain | `tegaandhenry.com` (until the handover) | none yet |
+| Access | Public | Public landing page; RSVP behind a household token or a signed-in session |
 
-There is currently **no link between them at all**: `weddingLink` in
-`src/config/site.ts` is `null`, because this site is for now standing in for the
-full wedding site. Do not import code, config, or content between the two, and do
-not reinstate the link without being asked.
+There is **no link between them**: `weddingLink` in `src/config/site.ts` is
+`null`, so the header nav item, the footer entry and the linked phrase in the
+intro copy are all absent. This site stands in for the wedding site until that
+application is ready. Do not import code, config, or content between the two, and
+do not reinstate the link without being asked.
 
 Note that the wedding repo is a **generic, content-free engine** with a hard rule
 against couple names or PII appearing anywhere in its source. This repo is the
@@ -68,10 +78,10 @@ inventing a new pattern.
   seems to need a server, say so explicitly and get a decision before adding
   `@astrojs/cloudflare` — that change has real operational cost for a site that
   currently has none.
-- **Never add `tegaandhenry.com` (or any subdomain of it) as a custom domain on
-  this Pages project.** The apex now points at the wedding application on Cloud
-  Run; claiming it here would take the live site — landing page, RSVP links and
-  console — offline in one step.
+- **Do not detach `tegaandhenry.com` from this Pages project.** It is attached
+  here and serving; removing it takes the live site off the internet. The handover
+  to the wedding application is planned but deliberately not yet done — see the
+  notice at the top. Equally, do not add further hostnames without being asked.
 - **Respect the contrast decisions.** `--muted` is intentionally darker than the
   wedding engine's brand muted (`#7d8273`, only 3.75:1 on cream — below AA for
   body text); the original is kept as `--muted-soft` for large/decorative use.
@@ -118,15 +128,20 @@ npx astro check   # typecheck; must be 0 errors, 0 warnings, 0 hints
 6. `README.md` updated if the palette, image pipeline, or structure changed;
    `HOSTING.md` updated if deployment or DNS behaviour changed.
 
-## Retirement
+## The planned handover — not yet
 
-The site builds and renders correctly; it simply is not the live site any more.
+When the wedding application is ready, the apex moves to it. **Do not start
+this without being asked.** The order matters:
 
-To retire it cleanly: remove the custom domain from the Cloudflare Pages
-project, then point the apex DNS at the wedding application's Cloud Run
-service. Leaving the domain attached here is the dangerous state — whichever
-DNS record wins decides which site guests reach, and this one has no RSVP.
+1. Remove `tegaandhenry.com` from this project's custom domains.
+2. Point the apex DNS at the wedding application's Cloud Run service.
+3. Verify the apex serves the wedding landing page and that a household invite
+   link resolves.
 
-Keep or delete the Pages project as you prefer. It costs nothing to keep, and
-it remains a reasonable starting point for a post-wedding personal site once
-the wedding application is no longer wanted at the apex.
+Doing (2) before (1) leaves the domain claimed in two places, and whichever
+record wins decides which site guests reach — this one has no RSVP.
+
+Keep the Pages project through the handover. After the wedding the intention is
+to reverse the move and have this site serve the apex again as the couple's
+long-term personal page, at which point the project and its build pipeline are
+wanted intact.
