@@ -1,26 +1,25 @@
 # TODO
 
-> **⚠ This project no longer serves `tegaandhenry.com`.** As of 2026-08-03 the
-> wedding application serves the apex directly (wedding repo, ADR-020). The
-> deploy and DNS sections below are superseded — the only outstanding work here
-> is retiring the domain from this project. See "Retirement" in `GEMINI.md`.
-
-## 0. Retirement (do this first)
-
-- [ ] **Remove `tegaandhenry.com` from this Pages project's custom domains.**
-      While it is attached here, whichever DNS record wins decides which site
-      guests reach — and this one has no RSVP.
-- [ ] Point the apex DNS at the wedding application's Cloud Run service.
-- [ ] Verify: apex serves the hero + names + date + "Already invited? Sign in",
-      and a household invite link resolves.
-- [ ] Decide whether to keep the Pages project (free, and a reasonable starting
-      point for a post-wedding personal site) or delete it.
-
----
-
-Everything below predates the change and is kept for reference only.
-
 Outstanding work on `tegaandhenry.com`. Roughly in the order it should be done.
+
+> **This site is live at the apex.** Sections 1 and 2 are done; the deployment
+> works and `tegaandhenry.com` is attached to this Pages project. Section 0 below
+> is *planned, not pending* — do not act on it without being asked.
+
+## 0. Handover to the wedding application — blocked, deliberately
+
+Waiting on the wedding application being ready (wedding repo, ADR-020). It will
+take the apex directly; there is no `wedding.` subdomain and none is planned.
+After the wedding the apex is intended to come back here.
+
+- [ ] Remove `tegaandhenry.com` from this Pages project's custom domains — **do
+      this before the DNS change**, not after. While it is claimed in two places,
+      whichever record wins decides which site guests reach, and this one has no
+      RSVP.
+- [ ] Point the apex DNS at the wedding application's Cloud Run service
+- [ ] Verify the apex serves the wedding landing page and that a household invite
+      link resolves
+- [ ] Keep the Pages project — it is wanted for the move back after the wedding
 
 ## 1. Get it into version control
 
@@ -49,18 +48,11 @@ Outstanding work on `tegaandhenry.com`. Roughly in the order it should be done.
       is `Allow: /`, so the placeholder copy is crawlable. Canonical tags already
       point at `tegaandhenry.com`, which limits the damage.
 
-## 3. DNS for the wedding subdomain
+## 3. DNS for the wedding subdomain — dropped
 
-**Under review.** This site now stands in for the full wedding site, so whether
-`wedding.tegaandhenry.com` is still wanted is an open question. Everything in this
-section assumes the original two-site split and should be confirmed before acting.
-
-- [ ] Point `wedding.tegaandhenry.com` at the Cloud Run service (a separate app —
-      see "The wedding subdomain" in `HOSTING.md`)
-- [ ] Keep the record **DNS-only / grey cloud** while the Google-managed
-      certificate provisions; if proxying later, set SSL/TLS to **Full (strict)**
-- [ ] **Do not** add `wedding.tegaandhenry.com` as a custom domain on this Pages
-      project — it would take the wedding application offline
+The `wedding.` subdomain plan has been abandoned in favour of the wedding
+application taking the apex directly (section 0). `wedding.tegaandhenry.com` has
+no DNS record and none is to be created. Nothing to do here.
 
 ## 4. Content
 

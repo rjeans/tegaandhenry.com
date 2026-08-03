@@ -63,7 +63,7 @@ top of `src/layouts/BaseLayout.astro`:
 | --- | --- | --- |
 | `--bg` | `#fbf9f2` | page ground |
 | `--surface` | `#eef3ea` | soft wash panels |
-| `--sage` | `#b9cfb2` | framing bands |
+| `--sage` | `#b9cfb2` | unused — see below |
 | `--primary` | `#4a9b45` | emphasis |
 | `--secondary` | `#a8a259` | hairline rules |
 | `--accent` | `#f2c3c2` | ornament, monogram ring |
@@ -75,6 +75,11 @@ only reaches 3.75:1 against the cream background — below AA for body text. The
 original brand value is kept as `--muted-soft` for large and decorative text. The
 link green is likewise darkened to `#2f6b2c` (6.0:1); `--primary` itself is only
 3.3:1 and so is used for accents, never for small text.
+
+`--sage` no longer renders anything. It coloured the thick bands that framed the
+top and bottom of every page, which were removed; only the `--secondary` hairline
+remains. The token is kept so the palette stays in step with the wedding engine's,
+and so the bands can be restored by re-adding a `.band-sage` rule.
 
 Dark-mode counterparts for every token are in the same block.
 

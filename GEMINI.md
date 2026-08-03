@@ -32,9 +32,9 @@ Context for AI coding sessions working in this repository.
 The public home page for `tegaandhenry.com` — a single-page Astro site,
 statically built, served from Cloudflare Pages, intended to outlive the wedding.
 
-It is deliberately tiny: a hero photograph, the couple's name, and one line of
-copy. Resist the urge to grow it. Sections get added when there is something real
-to put in them, not before.
+It is deliberately tiny: a hero photograph, the couple's name, and two short
+paragraphs of holding copy. Resist the urge to grow it. Sections get added when
+there is something real to put in them, not before.
 
 ## What this is NOT
 
@@ -105,8 +105,14 @@ src/assets/                    2560px web master — what the build actually rea
 public/images/og-home.jpg      1200x630 Open Graph card
 images/                        full-res originals; gitignored, never built from
 astro.config.mjs               static output, sitemap, tailwind
-wrangler.toml                  pages_build_output_dir = "./dist"
+wrangler.toml                  project name + pages_build_output_dir = "./dist"
 ```
+
+`wrangler.toml`'s `name` must stay `tegaandhenry-com`, matching the Pages project
+Cloudflare derived from the repository name. If it drifts, a manual
+`npx wrangler pages deploy` targets a project that does not exist and offers to
+create one — which would be a Direct Upload project, permanently unable to use the
+Git integration. There is no `.github/workflows`: Cloudflare builds on push.
 
 ## Commands
 
