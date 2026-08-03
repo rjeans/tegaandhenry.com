@@ -76,14 +76,14 @@ Everything below is one edit to `src/config/site.ts`. No component changes neede
 
 - [ ] Check the Open Graph card actually renders — paste the URL into WhatsApp,
       iMessage and a social preview debugger
-- [ ] **The giraffe favicon does not survive 16px.** It is traced line art —
-      thin strokes over mostly empty space — so at true tab size it renders as a
-      pale smudge rather than a mark. Rendering `public/favicon.svg` at 16px and
-      32px shows this plainly. Either ask the designer for a simplified,
-      heavier-weight emblem drawn for small sizes, or restore the previous
-      hand-drawn monogram favicon (`git show d98614a:public/favicon.svg`), which
-      was built for it and weighed 525 bytes. The hero logo is unaffected and
-      reads well.
+- [ ] **A favicon drawn for small sizes is still wanted.** The pack's emblem
+      (`th-logo-simple.svg`) was tried and reverted: traced line art, thin
+      strokes over mostly empty space, so at a true 16px tab it is a pale smudge.
+      The favicon is back to the hand-drawn `T&H` monogram, which was built for
+      that size. Ask the designer for a simplified, heavier-weight mark — the
+      giraffe's head alone would likely carry — then swap it in. Note
+      `theme.json` in the content pack points `emblemImagePath` at the same
+      unsuitable file, so the wedding site will hit this too.
 - [ ] Run Lighthouse against the deployed site
 - [ ] Test the light/dark toggle on a real iOS device (the no-flash inline script
       is the fragile part)

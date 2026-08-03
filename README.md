@@ -65,7 +65,14 @@ not published, and this one must build standalone.
 | Here | From the pack | Role |
 | --- | --- | --- |
 | `public/logo/th-logo-cream.svg` | `th-logo-cream.svg` | hero emblem |
-| `public/favicon.svg` | `th-logo-simple.svg` | browser tab |
+
+`public/favicon.svg` is **not** from the pack. The pack's emblem
+(`th-logo-simple.svg`) was tried and reverted: it is traced line art, thin
+strokes over mostly empty space, and at a true 16px browser tab it renders as a
+pale smudge rather than a mark. The favicon is the hand-drawn `T&H` monogram,
+which was drawn for that size and weighs 525 bytes against the emblem's 16 kB
+compressed. Swap it in only when there is a simplified mark with enough weight to
+survive 16px.
 
 The **cream reversed** variant is used on the hero deliberately. The default
 `th-logo.svg` is drawn for a cream ground — deep green initials, tan giraffe —
