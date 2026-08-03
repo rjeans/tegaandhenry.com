@@ -76,8 +76,14 @@ Everything below is one edit to `src/config/site.ts`. No component changes neede
 
 - [ ] Check the Open Graph card actually renders — paste the URL into WhatsApp,
       iMessage and a social preview debugger
-- [ ] Review the `T&H` monogram favicon at 16px; the two rings may need dropping
-      at that size
+- [ ] **The giraffe favicon does not survive 16px.** It is traced line art —
+      thin strokes over mostly empty space — so at true tab size it renders as a
+      pale smudge rather than a mark. Rendering `public/favicon.svg` at 16px and
+      32px shows this plainly. Either ask the designer for a simplified,
+      heavier-weight emblem drawn for small sizes, or restore the previous
+      hand-drawn monogram favicon (`git show d98614a:public/favicon.svg`), which
+      was built for it and weighed 525 bytes. The hero logo is unaffected and
+      reads well.
 - [ ] Run Lighthouse against the deployed site
 - [ ] Test the light/dark toggle on a real iOS device (the no-flash inline script
       is the fragile part)

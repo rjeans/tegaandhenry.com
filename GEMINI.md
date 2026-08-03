@@ -55,6 +55,12 @@ intro copy are all absent. This site stands in for the wedding site until that
 application is ready. Do not import code, config, or content between the two, and
 do not reinstate the link without being asked.
 
+There is a third repository, `~/Development/tegaandhenry-content` — the couple's
+content pack (logo, photographs, palette) that the wedding engine reads at
+runtime. This site **copies** assets from it rather than referencing it, because
+that repo is not published and this one must build standalone. When the pack ships
+new artwork, copy and re-optimise; see "The logo" in `README.md`.
+
 Note that the wedding repo is a **generic, content-free engine** with a hard rule
 against couple names or PII appearing anywhere in its source. This repo is the
 opposite — it is the couple's actual site and their names belong here. Never
@@ -102,6 +108,8 @@ src/layouts/BaseLayout.astro   palette tokens, dark mode, header, footer, SEO me
 src/pages/index.astro          hero + intro
 src/pages/404.astro
 src/assets/                    2560px web master — what the build actually reads
+public/logo/                   logo SVGs copied from the content pack
+public/favicon.svg             browser tab emblem
 public/images/og-home.jpg      1200x630 Open Graph card
 images/                        full-res originals; gitignored, never built from
 astro.config.mjs               static output, sitemap, tailwind

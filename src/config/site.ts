@@ -8,8 +8,28 @@ export const site = {
 
   /** Wordmark in the header and the browser title. */
   name: 'Tega & Henry',
-  /** Two initials, shown inside the monogram ring. */
+  /** Two initials. Only rendered as a fallback, when `logo` is null. */
   monogram: 'T&H',
+
+  /**
+   * The emblem at the top of the hero, copied from the shared content pack at
+   * `~/Development/tegaandhenry-content/assets/logo/` so this site and the
+   * wedding site show the same mark while that one is being built.
+   *
+   * This is the **cream reversed** variant (`th-logo-cream.svg`,
+   * `logoImageReversedPath` in the pack's `theme.json`), because it sits on the
+   * darkened hero photograph. The default `th-logo.svg` is drawn for a cream
+   * ground — deep green initials over a tan giraffe — and its initials all but
+   * vanish against the scrim.
+   *
+   * Set to null to fall back to the old ring-and-initials monogram.
+   */
+  logo: {
+    src: '/logo/th-logo-cream.svg',
+    alt: 'Tega and Henry — a giraffe beside their initials',
+    /** Rendered height. The artwork is portrait, roughly 5:7. */
+    heightClass: 'h-32 sm:h-40',
+  } as { src: string; alt: string; heightClass: string } | null,
 
   /** <meta name="description"> and the Open Graph description. */
   description:

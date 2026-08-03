@@ -52,6 +52,33 @@ Notable switches in there:
   correctly and no dead link is left behind.
 - `contact` — an empty array by default. Add `{ label, href }` entries to show
   contact or social links in the footer.
+- `logo` — the hero emblem. Set to `null` to fall back to the ring-and-initials
+  monogram that preceded it.
+
+## The logo
+
+The artwork comes from the shared content pack at
+`~/Development/tegaandhenry-content/assets/logo/`, so this site and the wedding
+site show the same mark. It is copied in rather than referenced — that repo is
+not published, and this one must build standalone.
+
+| Here | From the pack | Role |
+| --- | --- | --- |
+| `public/logo/th-logo-cream.svg` | `th-logo-cream.svg` | hero emblem |
+| `public/favicon.svg` | `th-logo-simple.svg` | browser tab |
+
+The **cream reversed** variant is used on the hero deliberately. The default
+`th-logo.svg` is drawn for a cream ground — deep green initials, tan giraffe —
+and against the darkened photograph the initials all but disappear. The cream
+variant is a single `#fbf9f2`, so it reads the way the old white monogram did.
+
+The files are traced from a bitmap, so they are one or two paths of several
+thousand segments — around 70 kB each after `svgo --multipass -p 1`, and 16–18 kB
+over the wire once compressed. Re-run that if the pack ever ships new versions:
+
+```
+npx svgo --multipass -p 1 -i <source>.svg -o public/logo/<name>.svg
+```
 
 ## Colours
 
